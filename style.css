@@ -89,7 +89,7 @@ nav {
   gap: 2rem;
 
   /* NOTE This creates the fade in/out animation */
-  opacity: 0;
+  /* opacity: 0; */
   transition: all 1s;
 }
 
@@ -126,7 +126,23 @@ nav {
   grid-row: 2 / span 3;
   background-color: #fff;
   border-radius: 1rem;
-  overflow: scroll;
+  overflow-y: scroll;
+}
+
+.movements::-webkit-scrollbar {
+  background-color: #dedede;
+  border-radius: 0rem 1rem 1rem 0rem;
+  width: 10px;
+}
+
+.movements::-webkit-scrollbar-thumb {
+  background-color: #cecece;
+  border-radius: 5rem;
+  transition: background 3s ease-in;
+}
+
+.movements:hover::-webkit-scrollbar-thumb {
+  background-color: #868686;
 }
 
 .movements__row {
