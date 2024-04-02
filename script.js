@@ -90,6 +90,14 @@ const createUsername = function (accounts) {
 
 createUsername(accounts);
 
+const calcDisplayBalance = function ({ movements }) {
+  const balance = movements.reduce((acc, curr) => acc + curr, 0);
+
+  labelBalance.innerHTML = balance;
+};
+
+calcBalance(account1);
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
