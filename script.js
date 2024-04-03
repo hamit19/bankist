@@ -68,7 +68,7 @@ const displayMovements = function (movements) {
         <div class="movements__row">
           <div class="movements__type movements__type--${type}">${i} ${type}</div>
           <div class="movements__date">3 days ago</div>
-          <div class="movements__value">${mov}</div>
+          <div class="movements__value">${mov}€</div>
         </div>
     `;
 
@@ -93,10 +93,32 @@ createUsername(accounts);
 const calcDisplayBalance = function ({ movements }) {
   const balance = movements.reduce((acc, curr) => acc + curr, 0);
 
-  labelBalance.innerHTML = balance;
+  labelBalance.innerHTML = balance + "€";
 };
 
-calcBalance(account1);
+calcDisplayBalance(account1);
+
+const calcDisplaySummary = function ({ movements }) {
+  const totalIn = movements
+    .filter((mov) => mov > 0)
+    .reduce((acc, curr) => acc + curr);
+
+  const totalOut = movements
+    .filter((mov) => mov < 0)
+    .reduce((acc, curr) => acc + curr, 0);
+
+  const interest = movements
+    .filter((mov) => mov > 0)
+    .map((mov) => (mov * 1.2) / 100)
+    .filter((mov) => mov >= 1)
+    .reduce((acc, int) => acc + int, 0);
+
+  labelSumIn.innerHTML = totalIn + "€";
+  labelSumOut.innerHTML = Math.abs(totalOut) + "€";
+  labelSumInterest.innerHTML = interest + "€";
+};
+
+calcDisplaySummary(account1);
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -109,3 +131,9 @@ const currencies = new Map([
 ]);
 
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+// const totalDeposits = movements
+//   .filter((mov) => mov > 0)
+//   .map((mov) => mov * 1.1)
+//   .reduce((acc, curr) => acc + curr);
+// console.log(totalDeposits);
