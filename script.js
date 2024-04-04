@@ -61,13 +61,12 @@ const inputLoanAmount = document.querySelector(".form__input--loan-amount");
 const inputCloseUsername = document.querySelector(".form__input--user");
 const inputClosePin = document.querySelector(".form__input--pin");
 
-const displayMovements = function (movements) {
+const displayMovements = function ({ movements }) {
   movements.forEach((mov, i) => {
     const type = mov > 0 ? "deposit" : "withdrawal";
     const html = `
         <div class="movements__row">
           <div class="movements__type movements__type--${type}">${i} ${type}</div>
-          <div class="movements__date">3 days ago</div>
           <div class="movements__value">${mov}€</div>
         </div>
     `;
@@ -75,8 +74,6 @@ const displayMovements = function (movements) {
     containerMovements.insertAdjacentHTML("afterbegin", html);
   });
 };
-
-displayMovements(account1.movements);
 
 const createUsername = function (accounts) {
   accounts.forEach((acc) => {
@@ -96,9 +93,7 @@ const calcDisplayBalance = function ({ movements }) {
   labelBalance.innerHTML = balance + "€";
 };
 
-calcDisplayBalance(account1);
-
-const calcDisplaySummary = function ({ movements }) {
+const calcDisplaySummary = function ({ movements, interestRate }) {
   const totalIn = movements
     .filter((mov) => mov > 0)
     .reduce((acc, curr) => acc + curr);
@@ -109,7 +104,7 @@ const calcDisplaySummary = function ({ movements }) {
 
   const interest = movements
     .filter((mov) => mov > 0)
-    .map((mov) => (mov * 1.2) / 100)
+    .map((mov) => (mov * interestRate) / 100)
     .filter((mov) => mov >= 1)
     .reduce((acc, int) => acc + int, 0);
 
@@ -118,7 +113,40 @@ const calcDisplaySummary = function ({ movements }) {
   labelSumInterest.innerHTML = interest + "€";
 };
 
-calcDisplaySummary(account1);
+let currentAccount;
+
+btnLogin.addEventListener("click", function (e) {
+  e.preventDefault();
+  let username = inputLoginUsername.value;
+  let pin = Number(inputLoginPin.value);
+
+  currentAccount = accounts.find((acc) => acc.username === username);
+
+  if (currentAccount?.pin === pin) {
+    //Display users first name and message
+    labelWelcome.textContent = `Welcome back, ${
+      currentAccount.owner.split(" ")[0]
+    }`;
+
+    //display UI
+    containerApp.style.opacity = 1;
+
+    //clear felids
+    username = pin = "";
+
+    inputLoginPin.blur();
+    inputLoginUsername.blur();
+
+    //display calculated balance
+    calcDisplayBalance(currentAccount);
+
+    //display transactions
+    displayMovements(currentAccount);
+
+    //display summary
+    calcDisplaySummary(currentAccount);
+  }
+});
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
