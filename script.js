@@ -160,7 +160,12 @@ btnTransfer.addEventListener("click", function (e) {
 
   const recAccount = accounts.find((acc) => acc.username === recipient);
 
-  if (recAccount && amount >= 1 && amount <= currentAccount.balance) {
+  if (
+    recAccount &&
+    amount >= 1 &&
+    amount <= currentAccount.balance &&
+    recAccount.username !== currentAccount.username
+  ) {
     recAccount.movements.push(amount);
     currentAccount.movements.push(-amount);
 
