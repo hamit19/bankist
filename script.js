@@ -61,6 +61,19 @@ const inputLoanAmount = document.querySelector(".form__input--loan-amount");
 const inputCloseUsername = document.querySelector(".form__input--user");
 const inputClosePin = document.querySelector(".form__input--pin");
 
+let currentAccount;
+
+const updateUI = function (currentAccount) {
+  //display calculated balance
+  calcDisplayBalance(currentAccount);
+
+  //display transactions
+  displayMovements(currentAccount);
+
+  //display summary
+  calcDisplaySummary(currentAccount);
+};
+
 const displayMovements = function ({ movements }) {
   movements.forEach((mov, i) => {
     const type = mov > 0 ? "deposit" : "withdrawal";
@@ -87,10 +100,10 @@ const createUsername = function (accounts) {
 
 createUsername(accounts);
 
-const calcDisplayBalance = function ({ movements }) {
-  const balance = movements.reduce((acc, curr) => acc + curr, 0);
+const calcDisplayBalance = function (acc) {
+  acc.balance = acc.movements.reduce((acc, curr) => acc + curr, 0);
 
-  labelBalance.innerHTML = balance + "€";
+  labelBalance.innerHTML = acc?.balance + "€";
 };
 
 const calcDisplaySummary = function ({ movements, interestRate }) {
@@ -113,8 +126,6 @@ const calcDisplaySummary = function ({ movements, interestRate }) {
   labelSumInterest.innerHTML = interest + "€";
 };
 
-let currentAccount;
-
 btnLogin.addEventListener("click", function (e) {
   e.preventDefault();
   let username = inputLoginUsername.value;
@@ -132,19 +143,33 @@ btnLogin.addEventListener("click", function (e) {
     containerApp.style.opacity = 1;
 
     //clear felids
-    username = pin = "";
+    inputLoginPin.value = inputLoginUsername.value = "";
 
     inputLoginPin.blur();
     inputLoginUsername.blur();
 
-    //display calculated balance
-    calcDisplayBalance(currentAccount);
+    updateUI(currentAccount);
+  }
+});
 
-    //display transactions
-    displayMovements(currentAccount);
+btnTransfer.addEventListener("click", function (e) {
+  e.preventDefault();
 
-    //display summary
-    calcDisplaySummary(currentAccount);
+  let amount = Number(inputTransferAmount.value);
+  let recipient = inputTransferTo.value;
+
+  const recAccount = accounts.find((acc) => acc.username === recipient);
+
+  if (recAccount && amount >= 1 && amount <= currentAccount.balance) {
+    recAccount.movements.push(amount);
+    currentAccount.movements.push(-amount);
+
+    inputTransferAmount.value = inputTransferTo.value = "";
+
+    inputTransferAmount.blur();
+    inputTransferTo.blur();
+
+    updateUI(currentAccount);
   }
 });
 
