@@ -126,6 +126,8 @@ const calcDisplaySummary = function ({ movements, interestRate }) {
   labelSumInterest.innerHTML = interest + "€";
 };
 
+// Event Listeners
+
 btnLogin.addEventListener("click", function (e) {
   e.preventDefault();
   let username = inputLoginUsername.value;
@@ -176,6 +178,25 @@ btnTransfer.addEventListener("click", function (e) {
 
     updateUI(currentAccount);
   }
+});
+
+btnClose.addEventListener("click", function (e) {
+  e.preventDefault();
+
+  if (
+    inputCloseUsername.value === currentAccount.username &&
+    Number(inputClosePin.value) === currentAccount.pin
+  ) {
+    const accIndex = accounts.findIndex(
+      (acc) => acc.username === inputCloseUsername.value
+    );
+
+    accounts.splice(accIndex, 1);
+
+    containerApp.style.opacity = 0;
+  }
+
+  inputCloseUsername.value = inputClosePin.value = "";
 });
 
 /////////////////////////////////////////////////
