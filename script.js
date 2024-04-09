@@ -74,12 +74,18 @@ const updateUI = function (currentAccount) {
   calcDisplaySummary(currentAccount);
 };
 
-const displayMovements = function ({ movements }) {
-  movements.forEach((mov, i) => {
+const displayMovements = function ({ movements }, sort = false) {
+  containerMovements.innerHTML = "";
+
+  const moves = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+  moves.forEach((mov, i) => {
     const type = mov > 0 ? "deposit" : "withdrawal";
     const html = `
         <div class="movements__row">
-          <div class="movements__type movements__type--${type}">${i} ${type}</div>
+          <div class="movements__type movements__type--${type}">${
+      i + 1
+    } ${type}</div>
           <div class="movements__value">${mov}€</div>
         </div>
     `;
@@ -216,6 +222,16 @@ btnLoan.addEventListener("click", function (e) {
   }
 });
 
+let sorted = false;
+
+btnSort.addEventListener("click", function (e) {
+  e.preventDefault();
+
+  displayMovements(currentAccount, !sorted);
+
+  sorted = !sorted;
+});
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -233,3 +249,12 @@ const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 //   .map((mov) => mov * 1.1)
 //   .reduce((acc, curr) => acc + curr);
 // console.log(totalDeposits);
+
+const test = [1, 2, 3, [4, 5, 6], [7, 8, [9, 10, [11, 12]]]];
+
+// const flattenedTest = test.flat(3);
+// console.log(flattenedTest);
+
+// const overallBalance = accounts
+//   .flatMap((acc) => acc.movements)
+//   .reduce((acc, mov) => acc + mov);
