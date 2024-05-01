@@ -137,7 +137,7 @@ const calcDisplaySummary = function ({ movements, interestRate }) {
 btnLogin.addEventListener("click", function (e) {
   e.preventDefault();
   let username = inputLoginUsername.value;
-  let pin = Number(inputLoginPin.value);
+  let pin = +inputLoginPin.value;
 
   currentAccount = accounts.find((acc) => acc.username === username);
 
@@ -163,7 +163,7 @@ btnLogin.addEventListener("click", function (e) {
 btnTransfer.addEventListener("click", function (e) {
   e.preventDefault();
 
-  let amount = Number(inputTransferAmount.value);
+  let amount = +inputTransferAmount.value;
   let recipient = inputTransferTo.value;
 
   const recAccount = accounts.find((acc) => acc.username === recipient);
@@ -191,7 +191,7 @@ btnClose.addEventListener("click", function (e) {
 
   if (
     inputCloseUsername.value === currentAccount.username &&
-    Number(inputClosePin.value) === currentAccount.pin
+    +inputClosePin.value === currentAccount.pin
   ) {
     const accIndex = accounts.findIndex(
       (acc) => acc.username === inputCloseUsername.value
@@ -208,7 +208,7 @@ btnClose.addEventListener("click", function (e) {
 btnLoan.addEventListener("click", function (e) {
   e.preventDefault();
 
-  const amount = Number(inputLoanAmount.value);
+  const amount = +inputLoanAmount.value;
 
   if (
     amount > 0 &&
