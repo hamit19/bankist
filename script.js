@@ -235,26 +235,3 @@ btnSort.addEventListener("click", function (e) {
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
-
-const currencies = new Map([
-  ["USD", "United States dollar"],
-  ["EUR", "Euro"],
-  ["GBP", "Pound sterling"],
-]);
-
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
-
-// const totalDeposits = movements
-//   .filter((mov) => mov > 0)
-//   .map((mov) => mov * 1.1)
-//   .reduce((acc, curr) => acc + curr);
-// console.log(totalDeposits);
-
-const test = [1, 2, 3, [4, 5, 6], [7, 8, [9, 10, [11, 12]]]];
-
-// const flattenedTest = test.flat(3);
-// console.log(flattenedTest);
-
-// const overallBalance = accounts
-//   .flatMap((acc) => acc.movements)
-//   .reduce((acc, mov) => acc + mov);
