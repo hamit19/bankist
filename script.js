@@ -138,9 +138,9 @@ const calcDisplaySummary = function ({ movements, interestRate }) {
     .filter((mov) => mov >= 1)
     .reduce((acc, int) => acc + int, 0);
 
-  labelSumIn.innerHTML = totalIn + "€";
-  labelSumOut.innerHTML = Math.abs(totalOut) + "€";
-  labelSumInterest.innerHTML = interest + "€";
+  labelSumIn.innerHTML = totalIn.toFixed(2) + "€";
+  labelSumOut.innerHTML = Math.abs(totalOut).toFixed(2) + "€";
+  labelSumInterest.innerHTML = interest.toFixed(2) + "€";
 };
 
 // Event Listeners
@@ -219,7 +219,7 @@ btnClose.addEventListener("click", function (e) {
 btnLoan.addEventListener("click", function (e) {
   e.preventDefault();
 
-  const amount = +inputLoanAmount.value;
+  const amount = Math.floor(inputLoanAmount.value);
 
   if (
     amount > 0 &&
