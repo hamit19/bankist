@@ -85,18 +85,22 @@ const updateUI = function (currentAccount) {
   calcDisplaySummary(currentAccount);
 };
 
-const displayMovements = function ({ movements }, sort = false) {
+const displayMovements = function (acc, sort = false) {
   containerMovements.innerHTML = "";
 
-  const moves = sort ? movements.slice().sort((a, b) => a - b) : movements;
+  const moves = sort
+    ? acc.movements.slice().sort((a, b) => a - b)
+    : acc.movements;
 
   moves.forEach((mov, i) => {
+    const date = new Date(acc.movementsDates[i]);
     const type = mov > 0 ? "deposit" : "withdrawal";
     const html = `
         <div class="movements__row">
-          <div class="movements__type movements__type--${type}">${
+        <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
+          <div class="movements__date">${displayDate(date)}</div>
           <div class="movements__value">${mov}€</div>
         </div>
     `;
@@ -115,8 +119,8 @@ const createUsername = function (accounts) {
   });
 };
 
-const displayDate = function () {
-  const date = new Date();
+const displayDate = function (mDate) {
+  const date = mDate ? mDate : new Date();
 
   const day = `${date.getDate()}`.padStart(2, 0);
   const month = `${date.getMonth() + 1}`.padStart(2, 0);
@@ -124,10 +128,9 @@ const displayDate = function () {
   const hour = date.getHours();
   const min = date.getMinutes();
 
-  labelDate.innerText = `${day}/${month}/${year}, ${hour}:${min} `;
+  return `${day}/${month}/${year} ${mDate ? "" : `, ${hour}:${min}`} `;
 };
 
-displayDate();
 createUsername(accounts);
 
 const calcDisplayBalance = function (acc) {
@@ -170,6 +173,8 @@ btnLogin.addEventListener("click", function (e) {
     labelWelcome.textContent = `Welcome back, ${
       currentAccount.owner.split(" ")[0]
     }`;
+
+    labelDate.innerText = displayDate();
 
     //display UI
     containerApp.style.opacity = 1;
