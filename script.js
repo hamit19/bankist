@@ -115,6 +115,18 @@ const createUsername = function (accounts) {
   });
 };
 
+const displayDate = function (){
+  const date = new Date();
+
+  const day = date.getDate()
+  const month = date.getMonth()
+  const year = date.getFullYear()
+  const hour = date.getHours()
+  const min = date.getMinuites()
+
+  labelDate.innerText = ` ${day}.padStart(2,0)/${month}.padStart(2,0)/${year}, ${hour}:${min} `
+  
+}
 createUsername(accounts);
 
 const calcDisplayBalance = function (acc) {
