@@ -199,7 +199,9 @@ btnTransfer.addEventListener("click", function (e) {
     recAccount.username !== currentAccount.username
   ) {
     recAccount.movements.push(amount);
+    recAccount.movmentsDates.push(Date.now().otString)
     currentAccount.movements.push(-amount);
+    currentAccount.movmentsDates.push(Date.now().otString);
 
     inputTransferAmount.value = inputTransferTo.value = "";
 
@@ -239,6 +241,7 @@ btnLoan.addEventListener("click", function (e) {
     currentAccount.movements.some((mov) => amount >= mov * 0.1)
   ) {
     currentAccount.movements.push(amount);
+    currentAccount.movmentsDates.push(Date.now().otString);
 
     updateUI(currentAccount);
 
