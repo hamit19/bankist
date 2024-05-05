@@ -17,8 +17,8 @@ const account1 = {
     "2020-04-01T10:17:24.185Z",
     "2020-05-08T14:11:59.604Z",
     "2020-05-27T17:01:17.194Z",
-    "2020-07-11T23:36:17.929Z",
-    "2020-07-12T10:51:36.790Z",
+    "2024-05-01T23:36:17.929Z",
+    "2024-05-04T10:51:36.790Z",
   ],
   currency: "EUR",
   locale: "pt-PT", // de-DE
@@ -122,13 +122,24 @@ const createUsername = function (accounts) {
 const displayDate = function (mDate) {
   const date = mDate ? mDate : new Date();
 
-  const day = `${date.getDate()}`.padStart(2, 0);
-  const month = `${date.getMonth() + 1}`.padStart(2, 0);
-  const year = date.getFullYear();
-  const hour = date.getHours();
-  const min = date.getMinutes();
+  const calcPassedDays = (currentDate, perDate) =>
+    Math.floor(Math.abs(perDate - currentDate) / (1000 * 60 * 60 * 24));
 
-  return `${day}/${month}/${year} ${mDate ? "" : `, ${hour}:${min}`} `;
+  const daysPassed = calcPassedDays(new Date(), mDate);
+
+  if (daysPassed === 0) return "Today";
+  if (daysPassed === 1) return "Yesterday";
+  if (daysPassed <= 7) {
+    return `${daysPassed} days ago`;
+  } else {
+    const day = `${date.getDate()}`.padStart(2, 0);
+    const month = `${date.getMonth() + 1}`.padStart(2, 0);
+    const year = date.getFullYear();
+    const hours = `${date.getHours()}`.padStart(2, 0);
+    const min = `${date.getMinutes()}`.padStart(2, 0);
+
+    return `${day}/${month}/${year} ${mDate ? "" : `, ${hours}:${min}`} `;
+  }
 };
 
 createUsername(accounts);
