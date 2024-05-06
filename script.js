@@ -100,7 +100,10 @@ const displayMovements = function (acc, sort = false) {
         <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
-          <div class="movements__date">${displayDate(date)}</div>
+          <div class="movements__date">${formatMovementDate(
+            date,
+            acc.locale
+          )}</div>
           <div class="movements__value">${mov}€</div>
         </div>
     `;
@@ -119,27 +122,17 @@ const createUsername = function (accounts) {
   });
 };
 
-const displayDate = function (mDate) {
-  const date = mDate ? mDate : new Date();
-
+const formatMovementDate = function (date, locale) {
   const calcPassedDays = (currentDate, perDate) =>
     Math.floor(Math.abs(perDate - currentDate) / (1000 * 60 * 60 * 24));
 
-  const daysPassed = calcPassedDays(new Date(), mDate);
+  const daysPassed = calcPassedDays(new Date(), date);
 
   if (daysPassed === 0) return "Today";
   if (daysPassed === 1) return "Yesterday";
-  if (daysPassed <= 7) {
-    return `${daysPassed} days ago`;
-  } else {
-    const day = `${date.getDate()}`.padStart(2, 0);
-    const month = `${date.getMonth() + 1}`.padStart(2, 0);
-    const year = date.getFullYear();
-    const hours = `${date.getHours()}`.padStart(2, 0);
-    const min = `${date.getMinutes()}`.padStart(2, 0);
+  if (daysPassed <= 7) return `${daysPassed} days ago`;
 
-    return `${day}/${month}/${year} ${mDate ? "" : `, ${hours}:${min}`} `;
-  }
+  return Intl.DateTimeFormat(locale).format(date);
 };
 
 createUsername(accounts);
@@ -185,7 +178,21 @@ btnLogin.addEventListener("click", function (e) {
       currentAccount.owner.split(" ")[0]
     }`;
 
-    labelDate.innerText = displayDate();
+    const now = new Date();
+
+    const options = {
+      hour: "numeric",
+      minute: "numeric",
+      day: "numeric",
+      month: "numeric",
+      year: "numeric",
+      // weekday: "long",
+    };
+
+    labelDate.innerText = new Intl.DateTimeFormat(
+      currentAccount.locale,
+      options
+    ).format(now);
 
     //display UI
     containerApp.style.opacity = 1;
