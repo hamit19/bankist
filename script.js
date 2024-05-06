@@ -169,9 +169,21 @@ const calcDisplaySummary = function ({ movements, interestRate }) {
     .filter((mov) => mov >= 1)
     .reduce((acc, int) => acc + int, 0);
 
-  labelSumIn.innerHTML = totalIn.toFixed(2) + "€";
-  labelSumOut.innerHTML = Math.abs(totalOut).toFixed(2) + "€";
-  labelSumInterest.innerHTML = interest.toFixed(2) + "€";
+  labelSumIn.innerHTML = formatCur(
+    totalIn,
+    currentAccount.locale,
+    currentAccount.currency
+  );
+  labelSumOut.innerHTML = formatCur(
+    Math.abs(totalOut),
+    currentAccount.locale,
+    currentAccount.currency
+  );
+  labelSumInterest.innerHTML = formatCur(
+    interest,
+    currentAccount.locale,
+    currentAccount.currency
+  );
 };
 
 // Event Listeners
