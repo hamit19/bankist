@@ -104,7 +104,11 @@ const displayMovements = function (acc, sort = false) {
             date,
             acc.locale
           )}</div>
-          <div class="movements__value">${mov}€</div>
+          <div class="movements__value">${formatCur(
+            mov,
+            acc.locale,
+            acc.currency
+          )}</div>
         </div>
     `;
 
@@ -135,12 +139,19 @@ const formatMovementDate = function (date, locale) {
   return Intl.DateTimeFormat(locale).format(date);
 };
 
+const formatCur = function (value, locale, currency) {
+  return Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: currency,
+  }).format(value);
+};
+
 createUsername(accounts);
 
 const calcDisplayBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, curr) => acc + curr, 0);
 
-  labelBalance.innerHTML = acc?.balance + "€";
+  labelBalance.innerHTML = formatCur(acc.balance, acc.locale, acc.currency);
 };
 
 const calcDisplaySummary = function ({ movements, interestRate }) {
