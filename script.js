@@ -72,7 +72,7 @@ const inputLoanAmount = document.querySelector(".form__input--loan-amount");
 const inputCloseUsername = document.querySelector(".form__input--user");
 const inputClosePin = document.querySelector(".form__input--pin");
 
-let currentAccount;
+let currentAccount, timer;
 
 const updateUI = function (currentAccount) {
   //display calculated balance
@@ -186,6 +186,30 @@ const calcDisplaySummary = function ({ movements, interestRate }) {
   );
 };
 
+const startLogoutTimer = function () {
+  let time = 120;
+
+  const tick = function () {
+    let min = String(Math.trunc(time / 60)).padStart(2, 0);
+    let sec = String(time % 60).padStart(2, 0);
+
+    labelTimer.textContent = `${min}:${sec}`;
+
+    if (time === 0) {
+      clearInterval(timer);
+      currentAccount = undefined;
+      labelWelcome.textContent = "Log in to get started";
+      containerApp.style.opacity = 0;
+    }
+
+    time--;
+  };
+
+  tick();
+  const timer = setInterval(tick, 1000);
+  return timer;
+};
+
 // Event Listeners
 
 btnLogin.addEventListener("click", function (e) {
@@ -226,6 +250,9 @@ btnLogin.addEventListener("click", function (e) {
     inputLoginPin.blur();
     inputLoginUsername.blur();
 
+    if (timer) clearInterval(timer);
+    timer = startLogoutTimer();
+
     updateUI(currentAccount);
   }
 });
@@ -255,6 +282,10 @@ btnTransfer.addEventListener("click", function (e) {
     inputTransferTo.blur();
 
     updateUI(currentAccount);
+
+    //restart timer
+    clearInterval(timer);
+    timer = startLogoutTimer();
   }
 });
 
@@ -294,6 +325,9 @@ btnLoan.addEventListener("click", function (e) {
 
       inputLoanAmount.value = "";
     }
+    //restart timer
+    clearInterval(timer);
+    timer = startLogoutTimer();
   }, 2500);
 });
 
