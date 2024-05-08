@@ -282,17 +282,19 @@ btnLoan.addEventListener("click", function (e) {
 
   const amount = Math.floor(inputLoanAmount.value);
 
-  if (
-    amount > 0 &&
-    currentAccount.movements.some((mov) => amount >= mov * 0.1)
-  ) {
-    currentAccount.movements.push(amount);
-    currentAccount.movementsDates.push(new Date().toISOString());
+  setTimeout(function () {
+    if (
+      amount > 0 &&
+      currentAccount.movements.some((mov) => amount >= mov * 0.1)
+    ) {
+      currentAccount.movements.push(amount);
+      currentAccount.movementsDates.push(new Date().toISOString());
 
-    updateUI(currentAccount);
+      updateUI(currentAccount);
 
-    inputLoanAmount.value = "";
-  }
+      inputLoanAmount.value = "";
+    }
+  }, 2500);
 });
 
 let sorted = false;
